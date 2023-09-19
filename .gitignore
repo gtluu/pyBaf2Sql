@@ -1,0 +1,10 @@
+/venv
+/.idea
+/__pychache__/*
+__pychache__/*
+*.pyc
+/prototype
+/data
+/build/*
+build/*
+/pyBaf2Sql.egg-info
