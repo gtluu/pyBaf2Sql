@@ -33,6 +33,9 @@ class BafData(object):
 
         self.analysis = None
 
+        self.get_db_tables()
+        self.close_sql_connection()
+
     def __del__(self):
         """
         Close connection to raw data handle.
