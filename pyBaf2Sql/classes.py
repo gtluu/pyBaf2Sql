@@ -54,6 +54,7 @@ class BafData(object):
         table_names = [table[0] for table in table_names]
         self.analysis = {name: pd.read_sql_query("SELECT * FROM " + name, self.conn) for name in table_names
                          if name != 'SupportedVariables'}
+        self.analysis['Variables'] = pd.read_sql_query('SELECT * FROM Variables', self.conn)
         self.analysis['Properties'] = {row['Key']: row['Value']
                                        for index, row in self.analysis['Properties'].iterrows()}
         cursor.close()
