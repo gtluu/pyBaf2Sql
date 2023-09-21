@@ -17,7 +17,7 @@ class BafData(object):
     :param all_variables: Whether to load all variables from analysis.sqlite database, defaults to False.
     :type all_variables: bool
     """
-    def __init__(self, bruker_d_folder_name: str, baf2sql, raw_calibration=False, all_variables=False):
+    def __init__(self, bruker_d_folder_name: str, baf2sql, raw_calibration=False, all_variables=True):
         """
         Constructor Method
         """
@@ -52,7 +52,8 @@ class BafData(object):
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
         table_names = cursor.fetchall()
         table_names = [table[0] for table in table_names]
-        self.analysis = {name: pd.read_sql_query("SELECT * FROM " + name, self.conn) for name in table_names}
+        self.analysis = {name: pd.read_sql_query("SELECT * FROM " + name, self.conn) for name in table_names
+                         if name != 'SupportedVariables'}
         self.analysis['Properties'] = {row['Key']: row['Value']
                                        for index, row in self.analysis['Properties'].iterrows()}
         cursor.close()
