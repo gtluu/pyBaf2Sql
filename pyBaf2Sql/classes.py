@@ -68,6 +68,21 @@ class BafData(object):
 
 
 class BafSpectrum(object):
+    """
+    Class for parsing and storing spectrum metadata and data arrays from BAF format data.
+
+    :param baf_data: BafData object containing metadata from analysis.sqlite database.
+    :type baf_data: pyBaf2Sql.classes.BafData
+    :param frame: ID of the frame of interest.
+    :type frame: int
+    :param mode: Data array mode, either "profile", "centroid", or "raw".
+    :type mode: str
+    :param profile_bins: Number of bins to bin spectrum to.
+    :type profile_bins: int
+    :param encoding: Encoding bit mode, either "64" or "32"
+    :type encoding: int
+    """
+
     def __init__(self, baf_data, frame: int, mode: str, profile_bins=0, encoding=64):
         """
         Constructor Method
