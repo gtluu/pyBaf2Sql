@@ -141,7 +141,7 @@ class BafSpectrum(object):
                                                                    self.profile_bins,
                                                                    self.encoding)
         if self.mz_array is not None and self.intensity_array is not None and \
-                self.mz_array.size != 0 and self.intentensity_array.size != 0 and \
+                self.mz_array.size != 0 and self.intensity_array.size != 0 and \
                 self.mz_array.size == self.intensity_array.size:
             self.total_ion_current = sum(self.intensity_array)
             base_peak_index = np.where(self.intensity_array == np.max(self.intensity_array))
