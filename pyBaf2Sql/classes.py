@@ -126,8 +126,8 @@ class BafSpectrum(object):
     def get_baf_data(self):
         frames_dict = self.baf_data.analysis['Spectra'][self.baf_data.analysis['Spectra']['Id'] ==
                                                         self.frame].to_dict(orient='records')[0]
-        acquisitionkey_dict = self.baf_data.analysis['Spectra'][self.baf_data.analysis['Spectra']['Id'] ==
-                                                                self.frame].to_dict(orient='records')[0]
+        acquisitionkey_dict = self.baf_data.analysis['AcquisitionKeys'][self.baf_data.analysis['AcquisitionKeys']['Id'] ==
+                                                                        frames_dict['AcquisitionKey']].to_dict(orient='records')[0]
         # Polarity == 0 -> 'positive'; Polarity == 1 -> 'negative"?
         if int(acquisitionkey_dict['Polarity']) == 0:
             self.polarity = '+'
