@@ -183,7 +183,7 @@ def set_num_threads(baf2sql, num_threads):
     baf2sql.baf2sql_set_num_threads(num_threads)
 
 
-def extract_baf_spectrum(baf_data, frame, mode, profile_bins=0, encoding=64):
+def extract_baf_spectrum(baf_data, frame, mode, profile_bins=0, mz_encoding=64, intensity_encoding=64):
     """
     Extract spectrum from BAF data with m/z and intensity arrays. Spectrum can either be centroid or profile mode. If
     "raw" mode is chosen, centroid mode will automatically be used.
@@ -196,22 +196,24 @@ def extract_baf_spectrum(baf_data, frame, mode, profile_bins=0, encoding=64):
     :type mode: str
     :param profile_bins: Number of bins to bin spectrum to.
     :type profile_bins: int
-    :param encoding: Encoding command line parameter, either "64" or "32".
-    :type encoding: int
+    :param mz_encoding: m/z encoding command line parameter, either "64" or "32".
+    :type mz_encoding: int
+    :param intensity_encoding: Intensity encoding command line parameter, either "64" or "32".
+    :type intensity_encoding: int
     :return: Tuple of mz_array (np.array) and intensity_array (np.array).
     :rtype: tuple[numpy.array]
     """
     frames_dict = baf_data.analysis['Spectra'][baf_data.analysis['Spectra']['Id'] == frame].to_dict(orient='records')[0]
     if mode == 'raw' or mode == 'centroid':
         mz_array = np.array(read_double(baf_data.api, baf_data.handle, int(frames_dict['LineMzId'])),
-                            dtype=get_encoding_dtype(encoding))
+                            dtype=get_encoding_dtype(mz_encoding))
         intensity_array = np.array(read_double(baf_data.api, baf_data.handle, int(frames_dict['LineIntensityId'])),
-                                   dtype=get_encoding_dtype(encoding))
+                                   dtype=get_encoding_dtype(intensity_encoding))
     elif mode == 'profile':
         mz_array = np.array(read_double(baf_data.api, baf_data.handle, int(frames_dict['ProfileMzId'])),
-                            dtype=get_encoding_dtype(encoding))
+                            dtype=get_encoding_dtype(mz_encoding))
         intensity_array = np.array(read_double(baf_data.api, baf_data.handle, int(frames_dict['ProfileIntensityId'])),
-                                   dtype=get_encoding_dtype(encoding))
+                                   dtype=get_encoding_dtype(intensity_encoding))
         if profile_bins != 0:
-            mz_array, intensity_array = bin_profile_spectrum(mz_array, intensity_array, profile_bins, encoding)
+            mz_array, intensity_array = bin_profile_spectrum(mz_array, intensity_array, profile_bins, mz_encoding)
     return mz_array, intensity_array

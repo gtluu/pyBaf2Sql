@@ -79,11 +79,13 @@ class BafSpectrum(object):
     :type mode: str
     :param profile_bins: Number of bins to bin spectrum to.
     :type profile_bins: int
-    :param encoding: Encoding bit mode, either "64" or "32"
-    :type encoding: int
+    :param mz_encoding: m/z encoding command line parameter, either "64" or "32".
+    :type mz_encoding: int
+    :param intensity_encoding: Intensity encoding command line parameter, either "64" or "32".
+    :type intensity_encoding: int
     """
 
-    def __init__(self, baf_data, frame: int, mode: str, profile_bins=0, encoding=64):
+    def __init__(self, baf_data, frame: int, mode: str, profile_bins=0, mz_encoding=64, intensity_encoding=64):
         """
         Constructor Method
         """
@@ -119,7 +121,8 @@ class BafSpectrum(object):
         self.ms2_no_precursor = False
         self.mode = mode
         self.profile_bins = profile_bins
-        self.encoding = encoding
+        self.mz_encoding = mz_encoding
+        self.intensity_encoding = intensity_encoding
 
         self.get_baf_data()
 
@@ -139,7 +142,8 @@ class BafSpectrum(object):
                                                                    self.frame,
                                                                    self.mode,
                                                                    self.profile_bins,
-                                                                   self.encoding)
+                                                                   self.mz_encoding,
+                                                                   self.intensity_encoding)
         if self.mz_array is not None and self.intensity_array is not None and \
                 self.mz_array.size != 0 and self.intensity_array.size != 0 and \
                 self.mz_array.size == self.intensity_array.size:
