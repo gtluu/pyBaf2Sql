@@ -17,8 +17,12 @@ class BafData(object):
     :type raw_calibration: bool
     :param all_variables: Whether to load all variables from analysis.sqlite database, defaults to False.
     :type all_variables: bool
+    :param sql_chunksize: Number of rows to read from SQL database query at once when reading tables/views from
+            analysis.sqlite.
+    :type sql_chunksize: int
     """
-    def __init__(self, bruker_d_folder_name: str, baf2sql, raw_calibration=False, all_variables=True):
+    def __init__(self, bruker_d_folder_name: str, baf2sql, raw_calibration=False, all_variables=True,
+                 sql_chunksize=1000):
         """
         Constructor Method
         """
@@ -34,7 +38,7 @@ class BafData(object):
 
         self.analysis = None
 
-        self.get_db_tables()
+        self.get_db_tables(sql_chunksize=sql_chunksize)
         self.close_sql_connection()
 
     def __del__(self):
