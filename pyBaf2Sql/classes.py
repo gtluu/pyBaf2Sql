@@ -44,18 +44,28 @@ class BafData(object):
         if hasattr(self, 'handle'):
             close_storage(self.api, self.handle, self.conn)
 
-    def get_db_tables(self):
+    def get_db_tables(self, sql_chunksize=1000):
         """
         Get a dictionary of all tables found in the analysis.sqlite SQLite database in which the table names act as
         keys and the tables as a pandas.DataFrame of values; this is stored in pyBaf2Sql.classes.BafData.analysis.
+
+        :param sql_chunksize: Number of rows to read from SQL database query at once when reading tables/views from
+            analysis.sqlite.
+        :type sql_chunksize: int
         """
         cursor = self.conn.cursor()
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
         table_names = cursor.fetchall()
         table_names = [table[0] for table in table_names]
-        self.analysis = {name: pd.read_sql_query("SELECT * FROM " + name, self.conn) for name in table_names
-                         if name != 'SupportedVariables'}
-        self.analysis['Variables'] = pd.read_sql_query('SELECT * FROM Variables', self.conn)
+        self.analysis = {name: pd.concat([i for i in pd.read_sql_query("SELECT * FROM " + name,
+                                                                       self.conn,
+                                                                       chunksize=sql_chunksize)],
+                                         ignore_index=True)
+                         for name in table_names if name != 'SupportedVariables'}
+        self.analysis['Variables'] = pd.concat([i for i in pd.read_sql_query('SELECT * FROM Variables',
+                                                                             self.conn,
+                                                                             chunksize=sql_chunksize)],
+                                               ignore_index=True)
         self.analysis['Properties'] = {row['Key']: row['Value']
                                        for index, row in self.analysis['Properties'].iterrows()}
         cursor.close()

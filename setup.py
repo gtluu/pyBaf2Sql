@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='pyBaf2Sql',
-      version='0.2.1',
+      version='0.2.2',
       description='Python wrapper for Bruker Baf2Sql',
       url='https://github.com/gtluu/pyBaf2Sql',
       author='Gordon T. Luu',
