@@ -1,3 +1,7 @@
+# The following code has been modified from TIMSCONVERT 1.0.0.
+# For more information see: https://github.com/gtluu/timsconvert/tree/manuscript_v1.0.0
+
+
 import os
 from ctypes import c_uint64, POINTER, c_double, c_float, c_uint32, create_string_buffer
 import numpy as np
